@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calculadora Financeira</title>
+    <link rel="stylesheet" href="styles/index.css" />
+  </head>
+  <body>
+    <img src="assets/logo-meli.svg" alt="Logo do Mercado Livre" />
+
+    <main>
+      <form onsubmit="event.preventDefault()">
+        <h1>Calculadora Financeira</h1>
+
+        <div class="select-wrapper">
+          <select id="descont-type">
+            <option value="fidelity">Desconto fidelidade</option>
+            <option value="second-unit">Desconto na segunda unidade</option>
+          </select>
+          <img src="assets/icons/dropdown.svg" alt="Ícone de seta para baixo" />
+        </div>
+
+        <hr />
+
+        <section>
+          <fieldset>
+            <div class="input-group">
+              <div class="label-group">
+                <label for="price" id="price-label">Valor Bruto</label>
+                <img
+                  src="assets/icons/information.svg"
+                  alt="Ícone de informação"
+                />
+              </div>
+              <input
+                type="text"
+                id="price"
+                placeholder="R$ 1.000,00"
+                inputmode="numeric"
+              />
+            </div>
+            <div class="input-group">
+              <div class="label-group">
+                <label for="discount" id="discount-label">Desconto</label>
+                <img
+                  src="assets/icons/information.svg"
+                  alt="Ícone de informação"
+                />
+              </div>
+              <input
+                type="text"
+                id="discount"
+                placeholder="R$ 100,00"
+                inputmode="numeric"
+              />
+            </div>
+          </fieldset>
+
+          <div class="result">
+            <div class="profit">
+              <div class="label-group">
+                <label>Margem de Lucro</label>
+                <img
+                  src="assets/icons/information.svg"
+                  alt="Ícone de informação"
+                />
+              </div>
+              <strong id="profit-margin-text">--</strong>
+            </div>
+
+            <div></div>
+
+            <div class="final-price">
+              <div class="label-group">
+                <label id="final-price-label">Preço Final</label>
+                <img
+                  src="assets/icons/information.svg"
+                  alt="Ícone de informação"
+                />
+              </div>
+              <div class="numbers-result">
+                <p id="final-price-value">R$ 0<span>00</span></p>
+                <span id="discount-percentage-text"></span>
+              </div>
+            </div>
+          </div>
+        </section>
+      </form>
+
+      <button>Saiba como usar</button>
+    </main>
+
+    <img
+      src="assets/merchant.svg"
+      alt="Ilustração de um comerciante do Mercado Livre servindo café"
+    />
+
+    <script src="scripts/index.js"></script>
+  </body>
+</html>
