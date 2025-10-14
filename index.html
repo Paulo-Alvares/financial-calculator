@@ -36,7 +36,22 @@
               <input
                 type="text"
                 id="price"
-                placeholder="R$ 1.000,00"
+                placeholder="R$ 0,00"
+                inputmode="numeric"
+              />
+            </div>
+            <div class="input-group">
+              <div class="label-group">
+                <label for="resale">Valor de Revenda</label>
+                <img
+                  src="assets/icons/information.svg"
+                  alt="Ícone de informação"
+                />
+              </div>
+              <input
+                type="text"
+                id="resale"
+                placeholder="R$ 0,00"
                 inputmode="numeric"
               />
             </div>
@@ -51,7 +66,7 @@
               <input
                 type="text"
                 id="discount"
-                placeholder="R$ 100,00"
+                placeholder="R$ 0,00"
                 inputmode="numeric"
               />
             </div>
@@ -73,14 +88,14 @@
 
             <div class="final-price">
               <div class="label-group">
-                <label id="final-price-label">Preço Final</label>
+                <label id="final-price-label"></label>
                 <img
                   src="assets/icons/information.svg"
                   alt="Ícone de informação"
                 />
               </div>
               <div class="numbers-result">
-                <p id="final-price-value">R$ 0<span>00</span></p>
+                <p id="final-price-value"><span></span></p>
                 <span id="discount-percentage-text"></span>
               </div>
             </div>
@@ -96,6 +111,6 @@
       alt="Ilustração de um comerciante do Mercado Livre servindo café"
     />
 
-    <script src="scripts/index.js"></script>
+    <script type="module" src="scripts/index.js"></script>
   </body>
 </html>

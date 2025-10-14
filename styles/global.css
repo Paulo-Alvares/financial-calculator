@@ -13,6 +13,7 @@
   --border-color: #bfbfbf;
   --box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
   --brand-color: #3483fa;
+  --brand-color-hover: #3075db;
   --status-color: #ccc;
   --status-color-high: #00a650;
   --status-color-medium: #f5a623;
@@ -21,7 +22,7 @@
   --font-family: "Proxima Nova", sans-serif;
 
   --title: 600 24px var(--font-family);
-  --button: 600 16px var(--font-family);
+  --button: 600 14px var(--font-family);
   --label: 600 12px var(--font-family);
   --result: 400 24px var(--font-family);
   --input: 400 16px var(--font-family);
@@ -36,6 +37,7 @@ body {
   display: flex;
   justify-content: space-around;
   align-items: center;
+  overflow: hidden;
 }
 
 img[src*="logo"] {
@@ -73,12 +75,12 @@ h1 {
 
 form {
   background-color: var(--background-secondary);
-  padding: 2rem;
+  padding: 1.5rem;
   border-radius: 6px;
   min-width: 23.75rem;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1rem;
 }
 
 hr {
@@ -129,7 +131,7 @@ fieldset {
 }
 
 .result {
-  margin-top: 2rem;
+  margin-top: 1rem;
   border: 1.5px solid var(--border-color);
   border-radius: 6px;
   padding: 1rem;
@@ -138,9 +140,14 @@ fieldset {
 
   & > div:nth-child(2) {
     height: auto;
-    width: 1.25px;
+    width: 1.5px;
     background-color: var(--border-color);
   }
+}
+
+.profit,
+.final-price {
+  width: 45%;
 }
 
 strong {
@@ -165,6 +172,7 @@ strong.profit-low {
 }
 
 p {
+  width: 100%;
   font: var(--result);
   display: flex;
   align-items: flex-start;
@@ -184,4 +192,9 @@ button {
   border-radius: 6px;
   padding: 14px 10px;
   cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: var(--brand-color-hover);
+  }
 }

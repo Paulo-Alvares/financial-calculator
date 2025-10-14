@@ -1,118 +1,171 @@
+import { MARKETS } from "./markets.js";
+
 document.addEventListener("DOMContentLoaded", () => {
-  const discountTypeSelect = document.getElementById("descont-type");
+  const getQueryParam = (name) => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get(name);
+  };
+
+  const detectByHost = () => {
+    const host = window.location.hostname.toLowerCase();
+    if (host.endsWith(".com.br")) return "BR";
+    if (host.endsWith(".com.co")) return "CO";
+    if (host.endsWith(".cl")) return "CL";
+    if (host.endsWith(".com.uy")) return "UY";
+    if (host.endsWith(".com.mx")) return "MX";
+    return null;
+  };
+
+  const detectByNavigator = () => {
+    const navLang = (
+      navigator.language ||
+      navigator.userLanguage ||
+      "pt-BR"
+    ).toUpperCase();
+    const region = navLang.split("-")[1] || "";
+    const supported = ["BR", "CO", "CL", "UY", "MX"];
+    return supported.includes(region) ? region : null;
+  };
+
+  const detectMarket = () => {
+    const qp = (getQueryParam("country") || "").toUpperCase();
+    if (MARKETS[qp]) return qp;
+    const byHost = detectByHost();
+    if (MARKETS[byHost]) return byHost;
+    const byNav = detectByNavigator();
+    if (MARKETS[byNav]) return byNav;
+    return "BR";
+  };
+
+  const MARKET_CODE = detectMarket();
+  const MARKET = MARKETS[MARKET_CODE];
+
+  document.documentElement.lang = MARKET.locale;
+
   const priceInput = document.getElementById("price");
+  const resaleInput = document.getElementById("resale");
   const discountInput = document.getElementById("discount");
-
-  const priceLabel = document.getElementById("price-label");
-  const discountLabel = document.getElementById("discount-label");
-  const finalPriceLabel = document.getElementById("final-price-label");
-
   const profitMarginText = document.getElementById("profit-margin-text");
   const finalPriceValue = document.getElementById("final-price-value");
   const discountPercentageText = document.getElementById(
     "discount-percentage-text"
   );
+  const titleEl = document.querySelector("main h1");
+  const selectType = document.getElementById("descont-type");
+  const optionFidelity = selectType
+    ? selectType.querySelector('option[value="fidelity"]')
+    : null;
+  const optionSecond = selectType
+    ? selectType.querySelector('option[value="second-unit"]')
+    : null;
+  const priceLabel = document.getElementById("price-label");
+  const resaleLabel = document.querySelector('label[for="resale"]');
+  const discountLabel = document.getElementById("discount-label");
+  const finalPriceLabel = document.getElementById("final-price-label");
+  const profitLabel = document.querySelector(".profit .label-group label");
+  const howToBtn = document.querySelector("button");
 
-  const currencyFormatter = new Intl.NumberFormat("pt-BR", {
+  let currencyFormatter = new Intl.NumberFormat(MARKET.locale, {
     style: "currency",
-    currency: "BRL",
+    currency: MARKET.currency,
   });
+  const currencyOptions = currencyFormatter.resolvedOptions();
+  const fractionDigits = currencyOptions.maximumFractionDigits;
+  const SCALE = Math.pow(10, fractionDigits);
 
   const formatAsCurrency = (input) => {
-    let value = input.value.replace(/\D/g, "");
-    if (value === "") {
+    let digits = input.value.replace(/\D/g, "");
+    if (digits === "") {
       input.value = "";
       return;
     }
-    const numericValue = parseFloat(value) / 100;
-    input.value = currencyFormatter.format(numericValue);
+    let numeric = parseInt(digits, 10) / SCALE;
+    input.value = currencyFormatter.format(numeric);
   };
 
-  const parseCurrency = (formattedValue) => {
-    if (!formattedValue) return 0;
-    const cleanedValue = formattedValue.replace(/[^\d,]/g, "");
-    const floatValue = cleanedValue.replace(",", ".");
-    return parseFloat(floatValue) || 0;
+  const parseCurrency = (formatted) => {
+    if (!formatted) return 0;
+    const digits = formatted.replace(/\D/g, "");
+    if (digits === "") return 0;
+    return parseInt(digits, 10) / SCALE;
   };
 
-  const updateLabels = () => {
-    const selectedMode = discountTypeSelect.value;
+  const formatCurrencyToHTML = (value) => {
+    const parts = new Intl.NumberFormat(MARKET.locale, {
+      style: "currency",
+      currency: MARKET.currency,
+    }).formatToParts(value);
 
-    if (selectedMode === "fidelity") {
-      priceLabel.textContent = "Valor Bruto";
-      discountLabel.textContent = "Desconto";
-      finalPriceLabel.textContent = "Preço Final";
-    } else if (selectedMode === "second-unit") {
-      priceLabel.textContent = "Valor da Unidade";
-      discountLabel.textContent = "Desconto na 2ª Unidade";
-      finalPriceLabel.textContent = "Preço Final (2 unidades)";
-    }
+    return parts
+      .map((part) => {
+        switch (part.type) {
+          case "fraction":
+            return `<span>${part.value}</span>`;
+          case "group":
+          case "decimal":
+            return ""; 
+          default:
+            return part.value; 
+        }
+      })
+      .join("");
+  };
+
+  const applyTranslations = () => {
+    const t = MARKET.texts;
+    if (titleEl) titleEl.textContent = t.title;
+    if (optionFidelity) optionFidelity.textContent = t.discountTypeFidelity;
+    if (optionSecond) optionSecond.textContent = t.discountTypeSecondUnit;
+    if (priceLabel) priceLabel.textContent = t.priceLabel;
+    if (resaleLabel) resaleLabel.textContent = t.resaleLabel;
+    if (discountLabel) discountLabel.textContent = t.discountLabel;
+    if (finalPriceLabel) finalPriceLabel.textContent = t.finalPriceLabel;
+    if (profitLabel) profitLabel.textContent = t.marginLabel;
+    if (howToBtn) howToBtn.textContent = t.howToUse;
+    const ph = currencyFormatter.format(0);
+    if (priceInput) priceInput.placeholder = ph;
+    if (resaleInput) resaleInput.placeholder = ph;
+    if (discountInput) discountInput.placeholder = ph;
   };
 
   const calculateAndupdateUI = () => {
-    const selectedMode = discountTypeSelect.value;
-    const value1 = parseCurrency(priceInput.value);
-    const value2 = parseCurrency(discountInput.value);
-
-    let totalGrossValue, totalDiscount, totalFinalPrice;
-
-    if (selectedMode === "fidelity") {
-      totalGrossValue = value1;
-      totalDiscount = value2;
-      totalFinalPrice = totalGrossValue - totalDiscount;
-    } else if (selectedMode === "second-unit") {
-      const unitPrice = value1;
-      const secondUnitDiscount = value2;
-
-      totalGrossValue = unitPrice * 2;
-      totalDiscount = secondUnitDiscount;
-      totalFinalPrice = totalGrossValue - totalDiscount;
-    }
-
+    const grossValue = parseCurrency(priceInput.value);
+    const resaleValue = parseCurrency(resaleInput.value);
+    const discountValue = parseCurrency(discountInput.value);
+    let finalPrice = resaleValue - discountValue;
+    if (finalPrice < 0) finalPrice = 0;
     let discountPercentage = 0;
-    if (totalGrossValue > 0) {
-      discountPercentage = (totalDiscount / totalGrossValue) * 100;
+    if (grossValue > 0) {
+      discountPercentage = (discountValue / resaleValue) * 100;
     }
-
-    if (totalFinalPrice < 0) {
-      totalFinalPrice = 0;
+    let profitMarginPercentage = 0;
+    if (resaleValue > 0) {
+      const profit = resaleValue - grossValue;
+      profitMarginPercentage = (profit / resaleValue) * 100;
     }
-
-    let remainingPercentage = 0;
-    if (totalGrossValue > 0) {
-      remainingPercentage = (totalFinalPrice / totalGrossValue) * 100;
-    }
-
     let marginText = "--";
     let marginClass = "";
-    if (totalGrossValue > 0) {
-      if (remainingPercentage > 40) {
-        marginText = "ALTA";
+    if (resaleValue > 0 && grossValue > 0) {
+      if (profitMarginPercentage > 40) {
+        marginText = MARKET.texts.marginHigh;
         marginClass = "profit-high";
-      } else if (remainingPercentage >= 20) {
-        marginText = "MÉDIA";
+      } else if (profitMarginPercentage >= 20) {
+        marginText = MARKET.texts.marginMedium;
         marginClass = "profit-medium";
       } else {
-        marginText = "BAIXA";
+        marginText = MARKET.texts.marginLow;
         marginClass = "profit-low";
       }
     }
-
     profitMarginText.textContent = marginText;
     profitMarginText.className = marginClass;
-
-    const finalPriceString = totalFinalPrice.toFixed(2).replace(".", ",");
-    const [integerPart, centsPart] = finalPriceString.split(",");
-    finalPriceValue.innerHTML = `R$ ${integerPart}<span>${
-      centsPart || "00"
-    }</span>`;
-
+    finalPriceValue.innerHTML = formatCurrencyToHTML(finalPrice);
     if (discountPercentage > 0) {
-      discountPercentageText.textContent = `Com ${discountPercentage.toFixed(
-        0
-      )}% de desconto`;
+      discountPercentageText.textContent = MARKET.texts.discountWith(
+        Math.round(discountPercentage)
+      );
     } else {
-      discountPercentageText.textContent = "";
+      discountPercentageText.textContent = MARKET.texts.discountPlaceholder;
     }
   };
 
@@ -121,14 +174,9 @@ document.addEventListener("DOMContentLoaded", () => {
     calculateAndupdateUI();
   };
 
+  applyTranslations();
   priceInput.addEventListener("input", () => handleInput(priceInput));
+  resaleInput.addEventListener("input", () => handleInput(resaleInput));
   discountInput.addEventListener("input", () => handleInput(discountInput));
-
-  discountTypeSelect.addEventListener("change", () => {
-    updateLabels();
-    calculateAndupdateUI();
-  });
-
-  updateLabels();
   calculateAndupdateUI();
 });
