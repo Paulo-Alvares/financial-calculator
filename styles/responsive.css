@@ -1,0 +1,27 @@
+@media (max-width: 800px) {
+  body {
+    flex-direction: column;
+    overflow-y: scroll;
+    align-items: flex-start;
+    gap: 1rem;
+    height: 100%;
+    padding: 1rem;
+  }
+
+  .container {
+    width: 23.75rem;
+  }
+
+  main,
+  .container {
+    margin: auto;
+  }
+
+  .desktop-only {
+    display: none;
+  }
+
+  img[src*="logo"] {
+    position: static;
+  }
+}

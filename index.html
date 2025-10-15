@@ -4,21 +4,46 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Calculadora Financeira</title>
+    <link
+      rel="shortcut icon"
+      href="https://http2.mlstatic.com/frontend-assets/ml-web-navigation/ui-navigation/5.21.22/mercadolibre/favicon.svg"
+      type="image/x-icon"
+    />
     <link rel="stylesheet" href="styles/index.css" />
   </head>
   <body>
-    <img src="assets/logo-meli.svg" alt="Logo do Mercado Livre" />
+    <div class="container">
+      <img src="assets/logo-meli.svg" alt="Logo do Mercado Livre" />
+    </div>
 
     <main>
       <form onsubmit="event.preventDefault()">
         <h1>Calculadora Financeira</h1>
 
-        <div class="select-wrapper">
-          <select id="descont-type">
-            <option value="fidelity">Desconto fidelidade</option>
-            <option value="second-unit">Desconto na segunda unidade</option>
-          </select>
-          <img src="assets/icons/dropdown.svg" alt="Ícone de seta para baixo" />
+        <select id="descont-type">
+          <option value="fidelity">Desconto fidelidade</option>
+          <option value="second-unit">Desconto na segunda unidade</option>
+        </select>
+
+        <div class="custom-select-wrapper">
+          <div class="custom-select-trigger">
+            <div class="selected-option"></div>
+            <img
+              src="assets/icons/dropdown.svg"
+              alt="Ícone de seta para baixo"
+              class="arrow"
+            />
+          </div>
+          <ul class="custom-options">
+            <li data-value="fidelity">
+              <img src="assets/icons/percent.svg" alt="Ícone de fidelidade" />
+              Desconto fidelidade
+            </li>
+            <li data-value="second-unit">
+              <img src="assets/icons/box.svg" alt="Ícone de segunda unidade" />
+              Desconto na segunda unidade
+            </li>
+          </ul>
         </div>
 
         <hr />
@@ -27,10 +52,11 @@
           <fieldset>
             <div class="input-group">
               <div class="label-group">
-                <label for="price" id="price-label">Valor Bruto</label>
+                <label for="price" id="price-label"></label>
                 <img
                   src="assets/icons/information.svg"
                   alt="Ícone de informação"
+                  id="price-title"
                 />
               </div>
               <input
@@ -42,10 +68,11 @@
             </div>
             <div class="input-group">
               <div class="label-group">
-                <label for="resale">Valor de Revenda</label>
+                <label for="resale"></label>
                 <img
                   src="assets/icons/information.svg"
                   alt="Ícone de informação"
+                  id="resale-title"
                 />
               </div>
               <input
@@ -57,10 +84,11 @@
             </div>
             <div class="input-group">
               <div class="label-group">
-                <label for="discount" id="discount-label">Desconto</label>
+                <label for="discount" id="discount-label"></label>
                 <img
                   src="assets/icons/information.svg"
                   alt="Ícone de informação"
+                  id="discount-title"
                 />
               </div>
               <input
@@ -75,10 +103,11 @@
           <div class="result">
             <div class="profit">
               <div class="label-group">
-                <label>Margem de Lucro</label>
+                <label></label>
                 <img
                   src="assets/icons/information.svg"
                   alt="Ícone de informação"
+                  id="margin-title"
                 />
               </div>
               <strong id="profit-margin-text">--</strong>
@@ -92,6 +121,7 @@
                 <img
                   src="assets/icons/information.svg"
                   alt="Ícone de informação"
+                  id="final-price-title"
                 />
               </div>
               <div class="numbers-result">
@@ -109,6 +139,7 @@
     <img
       src="assets/merchant.svg"
       alt="Ilustração de um comerciante do Mercado Livre servindo café"
+      class="desktop-only"
     />
 
     <script type="module" src="scripts/index.js"></script>

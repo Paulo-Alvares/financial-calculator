@@ -38,6 +38,7 @@ body {
   justify-content: space-around;
   align-items: center;
   overflow: hidden;
+  padding: 2rem;
 }
 
 img[src*="logo"] {
@@ -55,36 +56,109 @@ h1 {
   text-align: center;
 }
 
+#descont-type,
 .select-wrapper {
+  display: none;
+}
+
+.custom-select-wrapper {
   position: relative;
+  width: 100%;
+  font: var(--input);
+}
 
-  & select {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    text-align: center;
-  }
+.custom-select-trigger {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.625rem 0.875rem;
+  border: 1.5px solid var(--border-color);
+  border-radius: 4px;
+  background-color: var(--background-secondary);
+  cursor: pointer;
+  text-align: center;
+}
 
-  & img {
-    position: absolute;
-    top: 50%;
-    right: 0.875rem;
-    transform: translateY(-50%);
-  }
+.selected-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  justify-content: center;
+}
+
+.selected-option img {
+  width: 16px;
+  height: 16px;
+}
+
+.custom-select-trigger .arrow {
+  transition: transform 0.2s ease;
+}
+
+.custom-select-wrapper.open .arrow {
+  transform: rotate(180deg);
+}
+
+.custom-options {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background-color: var(--background-secondary);
+  border-radius: 4px;
+  border: 1.5px solid var(--border-color);
+  box-shadow: var(--box-shadow);
+  list-style: none;
+  z-index: 10;
+
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+}
+
+.custom-select-wrapper.open .custom-options {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.custom-options li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.custom-options li:not(:last-child) {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.custom-options li:hover {
+  background-color: #f0f0f0;
+}
+
+.custom-options li img {
+  width: 16px;
+  height: 16px;
 }
 
 form {
   background-color: var(--background-secondary);
   padding: 1.5rem;
   border-radius: 6px;
-  min-width: 23.75rem;
+  width: 23.75rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
 hr {
-  border: 1px solid var(--border-color);
+  border: none;
+  border-top: 1px solid var(--border-color);
 }
 
 input,
@@ -140,7 +214,7 @@ fieldset {
 
   & > div:nth-child(2) {
     height: auto;
-    width: 1.5px;
+    width: 1px;
     background-color: var(--border-color);
   }
 }
