@@ -6,32 +6,33 @@ document.addEventListener("DOMContentLoaded", () => {
     return params.get(name);
   };
 
-  const detectByHost = () => {
-    const host = window.location.hostname.toLowerCase();
-    if (host.endsWith(".com.br")) return "BR";
-    if (host.endsWith(".com.co")) return "CO";
-    if (host.endsWith(".cl")) return "CL";
-    if (host.endsWith(".com.uy")) return "UY";
-    if (host.endsWith(".com.mx")) return "MX";
-    return null;
-  };
-
   const detectByNavigator = () => {
-    const navLang = (
-      navigator.language ||
-      navigator.userLanguage ||
-      "pt-BR"
-    ).toUpperCase();
-    const region = navLang.split("-")[1] || "";
+    const navLang = (navigator.language || "pt-BR").toUpperCase();
+    const langParts = navLang.split("-");
+    const primaryLang = langParts[0];
+    const region = langParts[1] || "";
+
     const supported = ["BR", "CO", "CL", "UY", "MX"];
-    return supported.includes(region) ? region : null;
+
+    if (region && supported.includes(region)) {
+      return region;
+    }
+
+    if (primaryLang === "PT") {
+      return "BR";
+    }
+    if (primaryLang === "ES") {
+      return "MX";
+    }
+
+    console.log(region);
+
+    return null;
   };
 
   const detectMarket = () => {
     const qp = (getQueryParam("country") || "").toUpperCase();
     if (MARKETS[qp]) return qp;
-    const byHost = detectByHost();
-    if (MARKETS[byHost]) return byHost;
     const byNav = detectByNavigator();
     if (MARKETS[byNav]) return byNav;
     return "BR";

@@ -20,7 +20,7 @@ export const MARKETS = {
         "Indica a rentabilidade da sua venda. É calculada como a porcentagem do lucro (Valor de Revenda - Valor Bruto). A calculadora classifica a margem como ALTA, MÉDIA ou BAIXA.",
       finalPriceLabel: "Preço final",
       finalPriceTitle:
-        "Valor que o seu cliente pagará após a aplicação do desconto. Ele representa o valor final da transação para o comprador e é acompanhado pela porcentagem de desconto que foi concedida.",
+        "Valor que o seu cliente pagará após a aplicação do desconto. Ele representa o valor final da transação para o comprador e é acompanhado pela porcentagem de desconto que foi concedida por você.",
 
       priceLabelSecondUnit: "Valor bruto",
       priceTitleSecondUnit: "Custo de aquisição de CADA produto.",

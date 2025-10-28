@@ -248,6 +248,9 @@ strong.profit-low {
 p {
   width: 100%;
   font: var(--result);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   display: flex;
   align-items: flex-start;
 }
