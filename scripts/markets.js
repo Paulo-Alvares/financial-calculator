@@ -2,6 +2,7 @@ export const MARKETS = {
   BR: {
     locale: "pt-BR",
     currency: "BRL",
+    logo: "assets/logo-meli.svg",
     texts: {
       title: "Calculadora financeira",
       discountTypeFidelity: "Desconto fidelidade",
@@ -48,6 +49,7 @@ export const MARKETS = {
   CO: {
     locale: "es-CO",
     currency: "COP",
+    logo: "assets/logo-meli-es.svg",
     texts: {
       title: "Calculadora financiera",
       discountTypeFidelity: "Descuento por fidelidad",
@@ -94,6 +96,7 @@ export const MARKETS = {
   CL: {
     locale: "es-CL",
     currency: "CLP",
+    logo: "assets/logo-meli-es.svg",
     texts: {
       title: "Calculadora financiera",
       discountTypeFidelity: "Descuento por fidelidad",
@@ -140,6 +143,7 @@ export const MARKETS = {
   UY: {
     locale: "es-UY",
     currency: "UYU",
+    logo: "assets/logo-meli-es.svg",
     texts: {
       title: "Calculadora financiera",
       discountTypeFidelity: "Descuento por fidelidad",
@@ -186,6 +190,7 @@ export const MARKETS = {
   MX: {
     locale: "es-MX",
     currency: "MXN",
+    logo: "assets/logo-meli-es.svg",
     texts: {
       title: "Calculadora financiera",
       discountTypeFidelity: "Descuento por fidelidad",

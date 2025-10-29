@@ -13,7 +13,43 @@
   </head>
   <body>
     <div class="container">
-      <img src="assets/logo-meli.svg" alt="Logo do Mercado Livre" />
+      <div class="market-selector">
+        <div class="market-selected">
+          <img
+            src="assets/flags/br.svg"
+            alt="Bandeira do Brasil"
+            id="current-flag"
+          />
+          <img
+            src="assets/icons/dropdown.svg"
+            alt="Abrir seleção"
+            class=""
+          />
+        </div>
+
+        <ul class="market-options">
+          <li data-country="BR">
+            <img src="assets/flags/br.svg" alt="Brasil" />
+          </li>
+          <li data-country="CO">
+            <img src="assets/flags/co.svg" alt="Colômbia" />
+          </li>
+          <li data-country="CL">
+            <img src="assets/flags/cl.svg" alt="Chile" />
+          </li>
+          <li data-country="UY">
+            <img src="assets/flags/uy.svg" alt="Uruguai" />
+          </li>
+          <li data-country="MX">
+            <img src="assets/flags/mx.svg" alt="México" />
+          </li>
+        </ul>
+      </div>
+      <img
+        id="site-logo"
+        src="assets/logo-meli.svg"
+        alt="Logo do Mercado Livre"
+      />
     </div>
 
     <main>

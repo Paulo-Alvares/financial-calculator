@@ -1,48 +1,24 @@
 import { MARKETS } from "./markets.js";
 
-document.addEventListener("DOMContentLoaded", () => {
-  const getQueryParam = (name) => {
-    const params = new URLSearchParams(window.location.search);
-    return params.get(name);
-  };
-
-  const detectByNavigator = () => {
-    const navLang = (navigator.language || "pt-BR").toUpperCase();
-    const langParts = navLang.split("-");
-    const primaryLang = langParts[0];
-    const region = langParts[1] || "";
-
+// --- FUNÇÃO DE DETECÇÃO POR IP (sem alterações) ---
+const detectMarketByIP = async () => {
+  try {
+    const response = await fetch("http://ip-api.com/json/?fields=countryCode");
+    if (!response.ok) return null;
+    const data = await response.json();
+    const countryCode = data.countryCode;
     const supported = ["BR", "CO", "CL", "UY", "MX"];
-
-    if (region && supported.includes(region)) {
-      return region;
-    }
-
-    if (primaryLang === "PT") {
-      return "BR";
-    }
-    if (primaryLang === "ES") {
-      return "MX";
-    }
-
-    console.log(region);
-
+    return supported.includes(countryCode) ? countryCode : null;
+  } catch (error) {
+    console.error("Erro ao detectar país por IP:", error);
     return null;
-  };
+  }
+};
 
-  const detectMarket = () => {
-    const qp = (getQueryParam("country") || "").toUpperCase();
-    if (MARKETS[qp]) return qp;
-    const byNav = detectByNavigator();
-    if (MARKETS[byNav]) return byNav;
-    return "BR";
-  };
-
-  const MARKET_CODE = detectMarket();
-  const MARKET = MARKETS[MARKET_CODE];
-
-  document.documentElement.lang = MARKET.locale;
-
+// --- EVENTO PRINCIPAL ---
+document.addEventListener("DOMContentLoaded", async () => {
+  // --- OBTENÇÃO DOS ELEMENTOS DO DOM (movido para o escopo principal) ---
+  const logoImg = document.getElementById("site-logo");
   const priceInput = document.getElementById("price");
   const resaleInput = document.getElementById("resale");
   const discountInput = document.getElementById("discount");
@@ -70,14 +46,49 @@ document.addEventListener("DOMContentLoaded", () => {
   const customOptionsSecond = document.querySelector(
     '.custom-options li[data-value="second-unit"]'
   );
+  const currentFlag = document.getElementById("current-flag");
 
-  let currencyFormatter = new Intl.NumberFormat(MARKET.locale, {
-    style: "currency",
-    currency: MARKET.currency,
-  });
-  const currencyOptions = currencyFormatter.resolvedOptions();
-  const fractionDigits = currencyOptions.maximumFractionDigits;
-  const SCALE = Math.pow(10, fractionDigits);
+  // --- VARIÁVEIS DE ESTADO (declaradas com 'let' para serem modificadas) ---
+  let MARKET;
+  let currencyFormatter;
+  let SCALE;
+
+  // =========================================================================
+  //      MUDANÇA PRINCIPAL: FUNÇÃO CENTRAL DE ATUALIZAÇÃO
+  // =========================================================================
+  const updateAppForMarket = (marketCode) => {
+    MARKET = MARKETS[marketCode];
+    if (!MARKET) return; // Segurança caso o marketCode seja inválido
+
+    // 1. Atualizar Logo e Bandeira
+    document.documentElement.lang = MARKET.locale;
+    logoImg.src = MARKET.logo;
+    logoImg.alt = `Logo ${
+      marketCode === "BR" ? "Mercado Livre" : "Mercado Libre"
+    }`;
+    currentFlag.src = `assets/flags/${marketCode.toLowerCase()}.svg`;
+
+    // 2. Re-criar o formatador de moeda
+    currencyFormatter = new Intl.NumberFormat(MARKET.locale, {
+      style: "currency",
+      currency: MARKET.currency,
+    });
+    const currencyOptions = currencyFormatter.resolvedOptions();
+    const fractionDigits = currencyOptions.maximumFractionDigits;
+    SCALE = Math.pow(10, fractionDigits);
+
+    // 3. Limpar e reformatar os inputs existentes
+    priceInput.value = "";
+    resaleInput.value = "";
+    discountInput.value = "";
+
+    // 4. Chamar TODAS as funções de atualização com os novos dados
+    applyTranslations();
+    updateUIForMode(selectType.value);
+    calculateAndupdateUI(); // Isso também atualiza o seletor de tipo
+  };
+
+  // --- FUNÇÕES AUXILIARES (agora elas usam as variáveis de estado 'MARKET' e 'currencyFormatter') ---
 
   const formatAsCurrency = (input) => {
     let digits = input.value.replace(/\D/g, "");
@@ -97,11 +108,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const formatCurrencyToHTML = (value) => {
-    const parts = new Intl.NumberFormat(MARKET.locale, {
-      style: "currency",
-      currency: MARKET.currency,
-    }).formatToParts(value);
-
+    const parts = currencyFormatter.formatToParts(value);
     return parts
       .map((part) => {
         switch (part.type) {
@@ -136,33 +143,57 @@ document.addEventListener("DOMContentLoaded", () => {
     if (priceInput) priceInput.placeholder = ph;
     if (resaleInput) resaleInput.placeholder = ph;
     if (discountInput) discountInput.placeholder = ph;
+
+    // Atualiza também o texto do seletor personalizado
+    const selectedOptionDisplay = document.querySelector(".selected-option");
+    const currentMode = selectType.value;
+    const currentCustomOption = document.querySelector(
+      `.custom-options li[data-value="${currentMode}"]`
+    );
+    if (selectedOptionDisplay && currentCustomOption) {
+      selectedOptionDisplay.innerHTML = currentCustomOption.innerHTML;
+    }
   };
 
   const updateUIForMode = (mode) => {
     const t = MARKET.texts;
-    if (mode === "fidelity") {
-      priceLabel.textContent = t.priceLabel;
-      priceTitle.setAttribute("title", t.priceTitle);
-      resaleLabel.textContent = t.resaleLabel;
-      resaleTitle.setAttribute("title", t.resaleTitle);
-      discountLabel.textContent = t.discountLabel;
-      discountTitle.setAttribute("title", t.discountTitle);
-      profitLabel.textContent = t.marginLabel;
-      marginTitle.setAttribute("title", t.marginTitle);
-      finalPriceLabel.textContent = t.finalPriceLabel;
-      finalPriceTitle.setAttribute("title", t.finalPriceTitle);
-    } else if (mode === "second-unit") {
-      priceLabel.textContent = t.priceLabelSecondUnit;
-      priceTitle.setAttribute("title", t.priceTitleSecondUnit);
-      resaleLabel.textContent = t.resaleLabelSecondUnit;
-      resaleTitle.setAttribute("title", t.resaleTitleSecondUnit);
-      discountLabel.textContent = t.discountLabelSecondUnit;
-      discountTitle.setAttribute("title", t.discountTitleSecondUnit);
-      profitLabel.textContent = t.marginLabelSecondUnit;
-      marginTitle.setAttribute("title", t.marginTitleSecondUnit);
-      finalPriceLabel.textContent = t.finalPriceLabelSecondUnit;
-      finalPriceTitle.setAttribute("title", t.finalPriceTitleSecondUnit);
-    }
+    const labels =
+      mode === "fidelity"
+        ? {
+            pL: t.priceLabel,
+            pT: t.priceTitle,
+            rL: t.resaleLabel,
+            rT: t.resaleTitle,
+            dL: t.discountLabel,
+            dT: t.discountTitle,
+            mL: t.marginLabel,
+            mT: t.marginTitle,
+            fpL: t.finalPriceLabel,
+            fpT: t.finalPriceTitle,
+          }
+        : {
+            pL: t.priceLabelSecondUnit,
+            pT: t.priceTitleSecondUnit,
+            rL: t.resaleLabelSecondUnit,
+            rT: t.resaleTitleSecondUnit,
+            dL: t.discountLabelSecondUnit,
+            dT: t.discountTitleSecondUnit,
+            mL: t.marginLabelSecondUnit,
+            mT: t.marginTitleSecondUnit,
+            fpL: t.finalPriceLabelSecondUnit,
+            fpT: t.finalPriceTitleSecondUnit,
+          };
+
+    priceLabel.textContent = labels.pL;
+    priceTitle.setAttribute("title", labels.pT);
+    resaleLabel.textContent = labels.rL;
+    resaleTitle.setAttribute("title", labels.rT);
+    discountLabel.textContent = labels.dL;
+    discountTitle.setAttribute("title", labels.dT);
+    profitLabel.textContent = labels.mL;
+    marginTitle.setAttribute("title", labels.mT);
+    finalPriceLabel.textContent = labels.fpL;
+    finalPriceTitle.setAttribute("title", labels.fpT);
   };
 
   const calculateAndupdateUI = () => {
@@ -199,15 +230,12 @@ document.addEventListener("DOMContentLoaded", () => {
       const totalCost = grossValue * 2;
       const totalRevenue = resaleValue * 2 - discountValue;
       finalPrice = totalRevenue;
-
       if (resaleValue > 0) {
         discountPercentage = (discountValue / (resaleValue * 2)) * 100;
       }
-
       if (totalCost > 0) {
         const profit = totalRevenue - totalCost;
         const markupPercentage = (profit / totalCost) * 100;
-
         if (markupPercentage > 40) {
           marginText = MARKET.texts.marginHigh;
           marginClass = "profit-high";
@@ -226,14 +254,10 @@ document.addEventListener("DOMContentLoaded", () => {
     profitMarginText.textContent = marginText;
     profitMarginText.className = marginClass;
     finalPriceValue.innerHTML = formatCurrencyToHTML(finalPrice);
-
-    if (discountPercentage > 0) {
-      discountPercentageText.textContent = MARKET.texts.discountWith(
-        Math.round(discountPercentage)
-      );
-    } else {
-      discountPercentageText.textContent = MARKET.texts.discountPlaceholder;
-    }
+    discountPercentageText.textContent =
+      discountPercentage > 0
+        ? MARKET.texts.discountWith(Math.round(discountPercentage))
+        : MARKET.texts.discountPlaceholder;
   };
 
   const handleInput = (inputElement) => {
@@ -241,10 +265,21 @@ document.addEventListener("DOMContentLoaded", () => {
     calculateAndupdateUI();
   };
 
-  applyTranslations();
-  updateUIForMode(selectType.value);
-  calculateAndupdateUI();
+  // --- INICIALIZAÇÃO E EVENT LISTENERS ---
 
+  // Lógica de detecção inicial (simplificada)
+  const getQueryParam = (name) =>
+    new URLSearchParams(window.location.search).get(name);
+  const initialMarketCode = (
+    getQueryParam("country") ||
+    (await detectMarketByIP()) ||
+    "BR"
+  ).toUpperCase();
+
+  // Primeira chamada da função central
+  updateAppForMarket(initialMarketCode);
+
+  // Listeners para os inputs e selects
   priceInput.addEventListener("input", () => handleInput(priceInput));
   resaleInput.addEventListener("input", () => handleInput(resaleInput));
   discountInput.addEventListener("input", () => handleInput(discountInput));
@@ -253,25 +288,33 @@ document.addEventListener("DOMContentLoaded", () => {
     calculateAndupdateUI();
   });
 
+  // Listener para o seletor de país (simplificado para chamar a função central)
+  const marketSelector = document.querySelector(".market-selector");
+  marketSelector.addEventListener("click", (e) => {
+    const option = e.target.closest(".market-options li");
+    if (option) {
+      const newCountry = option.dataset.country;
+      updateAppForMarket(newCountry); // <-- A MÁGICA ACONTECE AQUI
+      marketSelector.classList.remove("open");
+    } else if (e.target.closest(".market-selected")) {
+      marketSelector.classList.toggle("open");
+    }
+  });
+
+  // Fechar o seletor ao clicar fora
+  window.addEventListener("click", (e) => {
+    if (!marketSelector.contains(e.target)) {
+      marketSelector.classList.remove("open");
+    }
+  });
+
+  // Lógica do seletor de tipo de desconto (sem alterações, mas inserida na ordem correta)
   const wrapper = document.querySelector(".custom-select-wrapper");
   const trigger = document.querySelector(".custom-select-trigger");
   const selectedOptionDisplay = document.querySelector(".selected-option");
   const customOptions = document.querySelectorAll(".custom-options li");
 
-  function setupInitialSelection() {
-    const initialValue = selectType.value;
-    const initialOption = document.querySelector(
-      `.custom-options li[data-value="${initialValue}"]`
-    );
-    if (initialOption) {
-      selectedOptionDisplay.innerHTML = initialOption.innerHTML;
-    }
-  }
-
-  trigger.addEventListener("click", () => {
-    wrapper.classList.toggle("open");
-  });
-
+  trigger.addEventListener("click", () => wrapper.classList.toggle("open"));
   customOptions.forEach((option) => {
     option.addEventListener("click", () => {
       selectedOptionDisplay.innerHTML = option.innerHTML;
@@ -280,12 +323,4 @@ document.addEventListener("DOMContentLoaded", () => {
       wrapper.classList.remove("open");
     });
   });
-
-  window.addEventListener("click", (e) => {
-    if (!wrapper.contains(e.target)) {
-      wrapper.classList.remove("open");
-    }
-  });
-
-  setupInitialSelection();
 });

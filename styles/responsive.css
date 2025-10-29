@@ -21,7 +21,9 @@
     display: none;
   }
 
-  img[src*="logo"] {
+  .container {
     position: static;
+    justify-content: flex-end;
+    flex-direction: row-reverse;
   }
 }
