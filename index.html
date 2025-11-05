@@ -20,11 +20,7 @@
             alt="Bandeira do Brasil"
             id="current-flag"
           />
-          <img
-            src="assets/icons/dropdown.svg"
-            alt="Abrir seleção"
-            class=""
-          />
+          <img src="assets/icons/dropdown.svg" alt="Abrir seleção" class="" />
         </div>
 
         <ul class="market-options">
@@ -92,8 +88,11 @@
                 <img
                   src="assets/icons/information.svg"
                   alt="Ícone de informação"
-                  id="price-title"
+                  class="tooltip-trigger"
+                  id="price-trigger"
+                  aria-describedby="price-tooltip"
                 />
+                <div class="tooltip" id="price-tooltip" role="tooltip"></div>
               </div>
               <input
                 type="text"
@@ -108,8 +107,11 @@
                 <img
                   src="assets/icons/information.svg"
                   alt="Ícone de informação"
-                  id="resale-title"
+                  class="tooltip-trigger"
+                  id="resale-trigger"
+                  aria-describedby="resale-tooltip"
                 />
+                <div class="tooltip" id="resale-tooltip" role="tooltip"></div>
               </div>
               <input
                 type="text"
@@ -124,8 +126,11 @@
                 <img
                   src="assets/icons/information.svg"
                   alt="Ícone de informação"
-                  id="discount-title"
+                  class="tooltip-trigger"
+                  id="discount-trigger"
+                  aria-describedby="discount-tooltip"
                 />
+                <div class="tooltip" id="discount-tooltip" role="tooltip"></div>
               </div>
               <input
                 type="text"
@@ -143,8 +148,11 @@
                 <img
                   src="assets/icons/information.svg"
                   alt="Ícone de informação"
-                  id="margin-title"
+                  class="tooltip-trigger"
+                  id="margin-trigger"
+                  aria-describedby="margin-tooltip"
                 />
+                <div class="tooltip" id="margin-tooltip" role="tooltip"></div>
               </div>
               <strong id="profit-margin-text">--</strong>
             </div>
@@ -157,8 +165,15 @@
                 <img
                   src="assets/icons/information.svg"
                   alt="Ícone de informação"
-                  id="final-price-title"
+                  class="tooltip-trigger"
+                  id="final-price-trigger"
+                  aria-describedby="final-price-tooltip"
                 />
+                <div
+                  class="tooltip"
+                  id="final-price-tooltip"
+                  role="tooltip"
+                ></div>
               </div>
               <div class="numbers-result">
                 <p id="final-price-value"><span></span></p>
@@ -169,7 +184,7 @@
         </section>
       </form>
 
-      <button>Saiba como usar</button>
+      <button id="how-to-use-btn">Saiba como usar</button>
     </main>
 
     <img
@@ -177,6 +192,23 @@
       alt="Ilustração de um comerciante do Mercado Livre servindo café"
       class="desktop-only"
     />
+
+    <div id="video-modal" class="modal-overlay">
+      <div class="modal-content">
+        <button id="close-modal" class="close-button">&times;</button>
+
+        <div class="video-wrapper">
+          <iframe
+            id="video-iframe"
+            src="https://www.youtube.com/embed/SEU-o_m9u-E"
+            title="Vídeo tutorial"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+        </div>
+      </div>
+    </div>
 
     <script type="module" src="scripts/index.js"></script>
   </body>

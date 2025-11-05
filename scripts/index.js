@@ -30,16 +30,16 @@ document.addEventListener("DOMContentLoaded", async () => {
   const titleEl = document.querySelector("main h1");
   const selectType = document.getElementById("descont-type");
   const priceLabel = document.getElementById("price-label");
-  const priceTitle = document.getElementById("price-title");
+  const priceTooltip = document.getElementById("price-tooltip");
   const resaleLabel = document.querySelector('label[for="resale"]');
-  const resaleTitle = document.getElementById("resale-title");
+  const resaleTooltip = document.getElementById("resale-tooltip");
   const discountLabel = document.getElementById("discount-label");
-  const discountTitle = document.getElementById("discount-title");
-  const marginTitle = document.getElementById("margin-title");
+  const discountTooltip = document.getElementById("discount-tooltip");
+  const marginTooltip = document.getElementById("margin-tooltip");
   const finalPriceLabel = document.getElementById("final-price-label");
-  const finalPriceTitle = document.getElementById("final-price-title");
+  const finalPriceTooltip = document.getElementById("final-price-tooltip");
   const profitLabel = document.querySelector(".profit .label-group label");
-  const howToBtn = document.querySelector("button");
+  const howToBtn = document.getElementById("how-to-use-btn");
   const customOptionsFidelity = document.querySelector(
     '.custom-options li[data-value="fidelity"]'
   );
@@ -47,6 +47,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     '.custom-options li[data-value="second-unit"]'
   );
   const currentFlag = document.getElementById("current-flag");
+  const priceTrigger = document.getElementById("price-trigger");
+  const resaleTrigger = document.getElementById("resale-trigger");
+  const discountTrigger = document.getElementById("discount-trigger");
+  const marginTrigger = document.getElementById("margin-trigger");
+  const finalPriceTrigger = document.getElementById("final-price-trigger");
 
   // --- VARIÁVEIS DE ESTADO (declaradas com 'let' para serem modificadas) ---
   let MARKET;
@@ -161,7 +166,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       mode === "fidelity"
         ? {
             pL: t.priceLabel,
-            pT: t.priceTitle,
+            pT: t.priceTitle, // O texto continua vindo do market.js
             rL: t.resaleLabel,
             rT: t.resaleTitle,
             dL: t.discountLabel,
@@ -185,16 +190,72 @@ document.addEventListener("DOMContentLoaded", async () => {
           };
 
     priceLabel.textContent = labels.pL;
-    priceTitle.setAttribute("title", labels.pT);
+    // MUDANÇA AQUI: De 'setAttribute("title", ...)' para '.textContent'
+    priceTooltip.textContent = labels.pT;
+
     resaleLabel.textContent = labels.rL;
-    resaleTitle.setAttribute("title", labels.rT);
+    resaleTooltip.textContent = labels.rT; // MUDANÇA
+
     discountLabel.textContent = labels.dL;
-    discountTitle.setAttribute("title", labels.dT);
+    discountTooltip.textContent = labels.dT; // MUDANÇA
+
     profitLabel.textContent = labels.mL;
-    marginTitle.setAttribute("title", labels.mT);
+    marginTooltip.textContent = labels.mT; // MUDANÇA
+
     finalPriceLabel.textContent = labels.fpL;
-    finalPriceTitle.setAttribute("title", labels.fpT);
+    finalPriceTooltip.textContent = labels.fpT; // MUDANÇA
   };
+
+  const allTriggers = [
+    priceTrigger,
+    resaleTrigger,
+    discountTrigger,
+    marginTrigger,
+    finalPriceTrigger,
+  ];
+  const allTooltips = [
+    priceTooltip,
+    resaleTooltip,
+    discountTooltip,
+    marginTooltip,
+    finalPriceTooltip,
+  ];
+
+  // Função para fechar todos os tooltips
+  const closeAllTooltips = () => {
+    allTooltips.forEach((tooltip) => tooltip.classList.remove("show"));
+  };
+
+  // Adiciona listener de clique para cada ícone (trigger)
+  allTriggers.forEach((trigger) => {
+    if (trigger) {
+      const tooltipId = trigger.getAttribute("aria-describedby");
+      const tooltip = document.getElementById(tooltipId);
+
+      if (tooltip) {
+        trigger.addEventListener("click", (e) => {
+          e.stopPropagation(); // Impede que o clique chegue ao 'window'
+
+          // Verifica se o tooltip clicado já estava aberto
+          const wasOpen = tooltip.classList.contains("show");
+
+          // Fecha todos os tooltips abertos
+          closeAllTooltips();
+
+          // Se o tooltip clicado não estava aberto, ele o abre.
+          // Se estava, o passo anterior já o fechou (toggle)
+          if (!wasOpen) {
+            tooltip.classList.add("show");
+          }
+        });
+      }
+    }
+  });
+
+  // Adiciona listener "clique fora" para fechar
+  window.addEventListener("click", () => {
+    closeAllTooltips();
+  });
 
   const calculateAndupdateUI = () => {
     const mode = selectType.value;

@@ -62,7 +62,7 @@ body {
   cursor: pointer;
   background-color: #fff;
   border-radius: 8px;
-  padding: .5rem;
+  padding: 0.5rem;
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
 }
 
@@ -335,4 +335,140 @@ button {
   &:hover {
     background-color: var(--brand-color-hover);
   }
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal-overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-content {
+  position: relative;
+  background: #111;
+  border-radius: 8px;
+  padding: 10px;
+  width: 90%;
+  max-width: 900px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+  transform: scale(0.9);
+  transition: transform 0.3s ease;
+}
+
+.modal-overlay.open .modal-content {
+  transform: scale(1);
+}
+
+.close-button {
+  position: absolute;
+  top: -15px;
+  right: -15px;
+
+  width: 36px;
+  height: 36px;
+  background: #ffffff;
+  color: #333;
+  border: none;
+  border-radius: 50%;
+  font-size: 1.6rem;
+  font-weight: bold;
+  line-height: 36px;
+  text-align: center;
+  cursor: pointer;
+  z-index: 1001;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease;
+}
+
+.close-button:hover {
+  transform: scale(1.1);
+  background: #f0f0f0;
+}
+
+.video-wrapper {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%;
+  height: 0;
+}
+
+.video-wrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 4px;
+}
+
+/* global.css (Adicionar ao final) */
+
+/* 1. Torna o label-group o "container" para o posicionamento do tooltip */
+.label-group {
+  position: relative;
+}
+
+/* 2. O ícone já tem 'cursor: pointer', o que é ótimo. */
+
+/* 3. Estilos da nova caixa de tooltip */
+.tooltip {
+  /* Posicionamento */
+  position: absolute;
+  bottom: calc(100% + 8px); /* 8px acima do ícone */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+
+  /* Aparência */
+  background-color: #333; /* Cor escura, como um tooltip nativo */
+  color: var(--background-secondary); /* Texto branco */
+  padding: 8px 12px;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+
+  /* Comportamento */
+  width: 250px; /* Defina uma largura máxima ou fixa */
+  font-size: 13px;
+  line-height: 1.4;
+  text-align: left;
+
+  /* Escondido por padrão */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+/* 4. Estado "Aberto" que será ativado pelo JS */
+.tooltip.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* 5. (Opcional) Adiciona uma setinha para baixo */
+.tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%; /* Na parte de baixo do tooltip */
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 5px;
+  border-style: solid;
+  border-color: #333 transparent transparent transparent;
 }
