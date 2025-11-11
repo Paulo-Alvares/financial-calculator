@@ -44,6 +44,12 @@ export const MARKETS = {
       marginMedium: "MÉDIA",
       marginLow: "BAIXA",
       howToUse: "Saiba como usar",
+      asideTitle: "Entenda a Classificação",
+      asideHighDesc: "- Margem de lucro acima de 40%.",
+      asideMediumDesc: "- Margem de lucro entre 20% e 40%.",
+      asideLowDesc: "- Margem de lucro abaixo de 20%.",
+      aiWarning:
+        "O entendimento de margem de lucratividade (Alta, Média e Baixa) foi gerado com inteligência artificial.",
     },
   },
   CO: {
@@ -91,6 +97,12 @@ export const MARKETS = {
       marginMedium: "MEDIA",
       marginLow: "BAJA",
       howToUse: "Cómo usar",
+      asideTitle: "Entienda la Clasificación",
+      asideHighDesc: "- Margen de ganancia superior al 40%.",
+      asideMediumDesc: "- Margen de ganancia entre 20% y 40%.",
+      asideLowDesc: "- Margen de ganancia inferior al 20%.",
+      aiWarning:
+        "La comprensión del margen de beneficio (Alta, Media y Baja) fue generada con inteligencia artificial.",
     },
   },
   CL: {
@@ -138,6 +150,12 @@ export const MARKETS = {
       marginMedium: "MEDIA",
       marginLow: "BAJA",
       howToUse: "Cómo usar",
+      asideTitle: "Entienda la Clasificación",
+      asideHighDesc: "- Margen de ganancia superior al 40%.",
+      asideMediumDesc: "- Margen de ganancia entre 20% y 40%.",
+      asideLowDesc: "- Margen de ganancia inferior al 20%.",
+      aiWarning:
+        "La comprensión del margen de beneficio (Alta, Media y Baja) fue generada con inteligencia artificial.",
     },
   },
   UY: {
@@ -185,6 +203,12 @@ export const MARKETS = {
       marginMedium: "MEDIA",
       marginLow: "BAJA",
       howToUse: "Cómo usar",
+      asideTitle: "Entienda la Clasificación",
+      asideHighDesc: "- Margen de ganancia superior al 40%.",
+      asideMediumDesc: "- Margen de ganancia entre 20% y 40%.",
+      asideLowDesc: "- Margen de ganancia inferior al 20%.",
+      aiWarning:
+        "La comprensión del margen de beneficio (Alta, Media y Baja) fue generada con inteligencia artificial.",
     },
   },
   MX: {
@@ -232,6 +256,12 @@ export const MARKETS = {
       marginMedium: "MEDIA",
       marginLow: "BAJA",
       howToUse: "Cómo usar",
+      asideTitle: "Entienda la Clasificación",
+      asideHighDesc: "- Margen de ganancia superior al 40%.",
+      asideMediumDesc: "- Margen de ganancia entre 20% y 40%.",
+      asideLowDesc: "- Margen de ganancia inferior al 20%.",
+      aiWarning:
+        "La comprensión del margen de beneficio (Alta, Media y Baja) fue generada con inteligencia artificial.",
     },
   },
 };

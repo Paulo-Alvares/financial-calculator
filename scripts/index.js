@@ -56,6 +56,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   const closeModalBtn = document.getElementById("close-modal");
   const videoIframe = document.getElementById("video-iframe");
   const originalVideoSrc = videoIframe.src;
+  const asideTitle = document.getElementById("aside-title");
+  const asideHigh = document.getElementById("aside-high");
+  const asideMedium = document.getElementById("aside-medium");
+  const asideLow = document.getElementById("aside-low");
+  const asideWarning = document.getElementById("aside-warning");
+  const videoWarning = document.getElementById("video-warning");
 
   // --- VARIÁVEIS DE ESTADO (declaradas com 'let' para serem modificadas) ---
   let MARKET;
@@ -144,7 +150,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (secondUnitNode)
       secondUnitNode.nodeValue = ` ${t.discountTypeSecondUnit}`;
 
-    // if (howToBtn) howToBtn.textContent = t.howToUse;
+    // if (howToBtn) howToBtn.textContent = t.howToUse; // Correto, está comentado
     const ph = currencyFormatter.format(0);
     if (priceInput) priceInput.placeholder = ph;
     if (resaleInput) resaleInput.placeholder = ph;
@@ -158,6 +164,24 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (selectedOptionDisplay && currentCustomOption) {
       selectedOptionDisplay.innerHTML = currentCustomOption.innerHTML;
     }
+
+    // --- NOVO BLOCO DE TRADUÇÃO DO ASIDE ---
+    if (asideTitle) asideTitle.textContent = t.asideTitle;
+
+    // Reconstrói o HTML dos <li> para usar as tags <strong> já traduzidas
+    if (asideHigh) {
+      asideHigh.innerHTML = `<strong class="profit-high">${t.marginHigh}</strong> ${t.asideHighDesc}`;
+    }
+    if (asideMedium) {
+      asideMedium.innerHTML = `<strong class="profit-medium">${t.marginMedium}</strong> ${t.asideMediumDesc}`;
+    }
+    if (asideLow) {
+      asideLow.innerHTML = `<strong class="profit-low">${t.marginLow}</strong> ${t.asideLowDesc}`;
+    }
+
+    // Traduz o aviso de IA em ambos os lugares
+    if (asideWarning) asideWarning.textContent = t.aiWarning;
+    if (videoWarning) videoWarning.innerHTML = `<span>*</span> ${t.aiWarning}`;
   };
 
   const updateUIForMode = (mode) => {

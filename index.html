@@ -195,28 +195,50 @@
       />
 
       <ul>
-        <h3>Entenda a Classificação</h3>
+        <h3 id="aside-title">Entenda a Classificação</h3>
 
-        <li>
+        <li id="aside-high">
           <strong class="profit-high">ALTA</strong> - Margem de lucro acima de
           40%.
         </li>
 
-        <li>
+        <li id="aside-medium">
           <strong class="profit-medium">MÉDIA</strong> - Margem de lucro entre
           20% e 40%.
         </li>
 
-        <li>
+        <li id="aside-low">
           <strong class="profit-low">BAIXA</strong> - Margem de lucro abaixo de
           20%.
         </li>
 
-        <li class="warning">
+        <li class="warning" id="aside-warning">
           O entendimento de margem de lucratividade (Alta, Média e Baixa) foi
           gerado com inteligência artificial.
         </li>
       </ul>
+    </div>
+
+    <div id="video-modal" class="modal-overlay">
+      <div class="modal-content">
+        <button id="close-modal" class="close-button">&times;</button>
+
+        <div class="video-wrapper">
+          <iframe
+            id="video-iframe"
+            src="https://www.youtube.com/embed/cWP5vJ5kgno"
+            title="Vídeo tutorial"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+        </div>
+
+        <p class="video-text" id="video-warning">
+          <span>*</span> O entendimento de margem de lucratividade (Alta, Média
+          e Baixa) foi gerado com inteligência artificial.
+        </p>
+      </div>
     </div>
 
     <div id="video-modal" class="modal-overlay">

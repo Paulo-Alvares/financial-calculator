@@ -13,7 +13,8 @@
   }
 
   main,
-  .container {
+  .container,
+  .aside {
     margin: auto;
   }
 
@@ -25,5 +26,13 @@
     position: static;
     justify-content: flex-end;
     flex-direction: row-reverse;
+  }
+
+  .aside {
+    width: 23.75rem;
+  }
+
+  .aside ul {
+    margin: 0;
   }
 }
