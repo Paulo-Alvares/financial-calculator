@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const finalPriceLabel = document.getElementById("final-price-label");
   const finalPriceTooltip = document.getElementById("final-price-tooltip");
   const profitLabel = document.querySelector(".profit .label-group label");
-  const howToBtn = document.getElementById("how-to-use-btn");
+  // const howToBtn = document.getElementById("how-to-use-btn");
   const customOptionsFidelity = document.querySelector(
     '.custom-options li[data-value="fidelity"]'
   );
@@ -52,15 +52,16 @@ document.addEventListener("DOMContentLoaded", async () => {
   const discountTrigger = document.getElementById("discount-trigger");
   const marginTrigger = document.getElementById("margin-trigger");
   const finalPriceTrigger = document.getElementById("final-price-trigger");
+  const videoModal = document.getElementById("video-modal");
+  const closeModalBtn = document.getElementById("close-modal");
+  const videoIframe = document.getElementById("video-iframe");
+  const originalVideoSrc = videoIframe.src;
 
   // --- VARIÁVEIS DE ESTADO (declaradas com 'let' para serem modificadas) ---
   let MARKET;
   let currencyFormatter;
   let SCALE;
 
-  // =========================================================================
-  //      MUDANÇA PRINCIPAL: FUNÇÃO CENTRAL DE ATUALIZAÇÃO
-  // =========================================================================
   const updateAppForMarket = (marketCode) => {
     MARKET = MARKETS[marketCode];
     if (!MARKET) return; // Segurança caso o marketCode seja inválido
@@ -143,13 +144,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (secondUnitNode)
       secondUnitNode.nodeValue = ` ${t.discountTypeSecondUnit}`;
 
-    if (howToBtn) howToBtn.textContent = t.howToUse;
+    // if (howToBtn) howToBtn.textContent = t.howToUse;
     const ph = currencyFormatter.format(0);
     if (priceInput) priceInput.placeholder = ph;
     if (resaleInput) resaleInput.placeholder = ph;
     if (discountInput) discountInput.placeholder = ph;
 
-    // Atualiza também o texto do seletor personalizado
     const selectedOptionDisplay = document.querySelector(".selected-option");
     const currentMode = selectType.value;
     const currentCustomOption = document.querySelector(
@@ -166,7 +166,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       mode === "fidelity"
         ? {
             pL: t.priceLabel,
-            pT: t.priceTitle, // O texto continua vindo do market.js
+            pT: t.priceTitle,
             rL: t.resaleLabel,
             rT: t.resaleTitle,
             dL: t.discountLabel,
@@ -190,20 +190,19 @@ document.addEventListener("DOMContentLoaded", async () => {
           };
 
     priceLabel.textContent = labels.pL;
-    // MUDANÇA AQUI: De 'setAttribute("title", ...)' para '.textContent'
     priceTooltip.textContent = labels.pT;
 
     resaleLabel.textContent = labels.rL;
-    resaleTooltip.textContent = labels.rT; // MUDANÇA
+    resaleTooltip.textContent = labels.rT;
 
     discountLabel.textContent = labels.dL;
-    discountTooltip.textContent = labels.dT; // MUDANÇA
+    discountTooltip.textContent = labels.dT;
 
     profitLabel.textContent = labels.mL;
-    marginTooltip.textContent = labels.mT; // MUDANÇA
+    marginTooltip.textContent = labels.mT;
 
     finalPriceLabel.textContent = labels.fpL;
-    finalPriceTooltip.textContent = labels.fpT; // MUDANÇA
+    finalPriceTooltip.textContent = labels.fpT;
   };
 
   const allTriggers = [
@@ -383,5 +382,27 @@ document.addEventListener("DOMContentLoaded", async () => {
       selectType.dispatchEvent(new Event("change"));
       wrapper.classList.remove("open");
     });
+  });
+
+  const openModal = () => {
+    videoModal.classList.add("open");
+    if (videoIframe.src !== originalVideoSrc) {
+      videoIframe.src = originalVideoSrc;
+    }
+  };
+
+  const closeModal = () => {
+    videoModal.classList.remove("open");
+    videoIframe.src = originalVideoSrc;
+  };
+
+  // howToBtn.addEventListener("click", openModal);
+
+  closeModalBtn.addEventListener("click", closeModal);
+
+  videoModal.addEventListener("click", (e) => {
+    if (e.target === videoModal) {
+      closeModal();
+    }
   });
 });

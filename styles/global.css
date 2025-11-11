@@ -38,7 +38,7 @@ body {
   justify-content: space-around;
   align-items: center;
   overflow: hidden;
-  padding: 2rem;
+  padding: 2rem 4rem;
 }
 
 .container {
@@ -108,8 +108,36 @@ body {
   width: 150px;
 }
 
-img[src*="merchant"] {
-  width: 40%;
+.aside {
+  margin-left: 2rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.aside img {
+  width: 50%;
+}
+
+ul {
+  background-color: var(--background-secondary);
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  list-style: none;
+}
+
+ul li {
+  font: var(--input);
+}
+
+ul li.warning {
+  font: var(--label);
 }
 
 h1 {
@@ -343,7 +371,7 @@ button {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.85);
+  background: rgba(0, 0, 0, 0);
   backdrop-filter: blur(4px);
   z-index: 1000;
   display: flex;
@@ -361,7 +389,7 @@ button {
 
 .modal-content {
   position: relative;
-  background: #111;
+  background: var(--background-primary);
   border-radius: 8px;
   padding: 10px;
   width: 90%;
@@ -377,12 +405,11 @@ button {
 
 .close-button {
   position: absolute;
-  top: -15px;
-  right: -15px;
-
+  top: -28px;
+  right: -18px;
   width: 36px;
   height: 36px;
-  background: #ffffff;
+  background: #FFE600;
   color: #333;
   border: none;
   border-radius: 50%;
@@ -394,6 +421,9 @@ button {
   z-index: 1001;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
   transition: transform 0.2s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .close-button:hover {
@@ -416,6 +446,18 @@ button {
   height: 100%;
   border: none;
   border-radius: 4px;
+}
+
+.video-text {
+  margin-top: 1rem;
+  font: var(--label);
+}
+
+.video-text span {
+  font-size: 20px;
+  line-height: 100%;
+  color: var(--brand-color);
+  margin-right: 0.5rem;
 }
 
 /* global.css (Adicionar ao final) */
