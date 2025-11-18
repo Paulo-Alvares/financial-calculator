@@ -18,7 +18,7 @@ const detectMarketByIP = async () => {
 // --- EVENTO PRINCIPAL ---
 document.addEventListener("DOMContentLoaded", async () => {
   // --- OBTENÇÃO DOS ELEMENTOS DO DOM (movido para o escopo principal) ---
-  const logoImg = document.getElementById("site-logo");
+  // const logoImg = document.getElementById("site-logo");
   const priceInput = document.getElementById("price");
   const resaleInput = document.getElementById("resale");
   const discountInput = document.getElementById("discount");
@@ -73,11 +73,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!MARKET) return; // Segurança caso o marketCode seja inválido
 
     // 1. Atualizar Logo e Bandeira
-    document.documentElement.lang = MARKET.locale;
-    logoImg.src = MARKET.logo;
-    logoImg.alt = `Logo ${
-      marketCode === "BR" ? "Mercado Livre" : "Mercado Libre"
-    }`;
+    // document.documentElement.lang = MARKET.locale;
+    // logoImg.src = MARKET.logo;
+    // logoImg.alt = `Logo ${
+    //   marketCode === "BR" ? "Mercado Livre" : "Mercado Libre"
+    // }`;
     currentFlag.src = `assets/flags/${marketCode.toLowerCase()}.svg`;
 
     // 2. Re-criar o formatador de moeda
